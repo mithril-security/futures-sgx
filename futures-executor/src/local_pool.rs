@@ -14,7 +14,12 @@ use std::sync::{
     atomic::{AtomicBool, Ordering},
     Arc,
 };
+
+#[cfg(not(target_env = "sgx"))]
 use std::thread::{self, Thread};
+
+#[cfg(target_env = "sgx")]
+use std::thread::{self, SgxThread as Thread};
 
 /// A single-threaded task pool for polling futures to completion.
 ///
