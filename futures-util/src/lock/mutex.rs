@@ -6,8 +6,13 @@ use std::marker::PhantomData;
 use std::ops::{Deref, DerefMut};
 use std::pin::Pin;
 use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::Mutex as StdMutex;
 use std::{fmt, mem};
+
+#[cfg(not(target_env = "sgx"))]
+use std::sync::Mutex as StdMutex;
+
+#[cfg(target_env = "sgx")]
+use std::sync::SgxMutex as StdMutex;
 
 /// A futures-aware mutex.
 ///

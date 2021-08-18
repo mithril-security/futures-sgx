@@ -85,7 +85,14 @@ use std::fmt;
 use std::pin::Pin;
 use std::sync::atomic::AtomicUsize;
 use std::sync::atomic::Ordering::SeqCst;
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
+
+#[cfg(not(target_env = "sgx"))]
+use std::sync::Mutex;
+
+#[cfg(target_env = "sgx")]
+use std::sync::SgxMutex as Mutex;
+
 use std::thread;
 
 use crate::mpsc::queue::Queue;

@@ -7,7 +7,13 @@ use std::fmt;
 use std::pin::Pin;
 use std::sync::atomic::AtomicUsize;
 use std::sync::atomic::Ordering::{Acquire, SeqCst};
-use std::sync::{Arc, Mutex, Weak};
+use std::sync::{Arc, Weak};
+
+#[cfg(not(target_env = "sgx"))]
+use std::sync::Mutex;
+
+#[cfg(target_env = "sgx")]
+use std::sync::SgxMutex as Mutex;
 
 /// Future for the [`shared`](super::FutureExt::shared) method.
 #[must_use = "futures do nothing unless you `.await` or poll them"]
